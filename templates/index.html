@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>SmartAI – Chat Intelligent</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/style.css">
+
+<!-- PUB ADSENSE (A REMPLACER PLUS TARD) -->
+</head>
+
+<body>
+
+<div class="chat-container">
+    <h1>🤖 SmartAI Chat</h1>
+    <p class="subtitle">Intelligence Artificielle gratuite</p>
+
+    <!-- ZONE PUB -->
+    <div class="ad-box">
+        🔔 Espace publicité – AdSense ici
+    </div>
+
+    <div id="chat-box"></div>
+
+    <div class="input-zone">
+        <input id="msg" placeholder="Pose ta question..." autofocus>
+        <button onclick="send()">Envoyer</button>
+    </div>
+
+</div>
+
+<script>
+function send(){
+  let msg = document.getElementById("msg").value;
+  if(!msg) return;
+
+  document.getElementById("chat-box").innerHTML +=
+    `<div class="user">👤 ${msg}</div>`;
+  document.getElementById("msg").value = "";
+
+  fetch("/chat", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({message: msg})
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("chat-box").innerHTML +=
+      `<div class="ai">🤖 ${data.reply}</div>`;
+    document.getElementById("chat-box").scrollTop =
+      document.getElementById("chat-box").scrollHeight;
+  });
+}
+</script>
+
+</body>
+</html>
